@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# THIS FILE IS MANAGED BY PUPPET. ANY MANUAL CHANGES WILL GET OVERWRITTEN.
+export PATH=/opt/puppetlabs/bin:/opt/puppetlabs/puppet/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+# Avoid r10k from sending emails every hour, assuming there is a working MTA
+r10k deploy environment production -vp > /dev/null
