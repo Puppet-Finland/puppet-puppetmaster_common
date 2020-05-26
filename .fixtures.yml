@@ -3,4 +3,19 @@
 ---
 fixtures:
   forge_modules:
-     cron_core: "puppetlabs/cron_core"
+     apt:
+       repo: "puppetlabs/apt"
+       ref: "7.4.1"
+     cron_core:
+       repo: "puppetlabs/cron_core"
+       ref: "1.0.3"
+     stdlib:
+       repo: "puppetlabs/stdlib"
+       ref: "6.2.0"
+  repositories:
+    bolt:
+      repo: "https://github.com/Puppet-Finland/puppet-bolt.git"
+      ref: "a25cf33b98b55df5b497b5ee0f65c405839f274a"
+    ssh_sudoers:
+      repo: "https://github.com/Puppet-Finland/puppet-ssh_sudoers.git"
+      ref: "02a5d3c2cdc9ac0ae9e410bfe52fb30d3fa5bba8"
