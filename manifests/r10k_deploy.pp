@@ -2,7 +2,10 @@
 #
 class puppetmaster_common::r10k_deploy
 (
-  Boolean $autodeploy = true
+  Boolean $autodeploy = true,
+  Variant[Array[String], Array[Integer[0-23]], String, Integer[0-23]] $hour = '*',
+  Variant[Array[String], Array[Integer[0-59]], String, Integer[0-59]] $minute = '50',
+  Variant[Array[String], Array[Integer[0-7]],  String, Integer[0-7]]  $weekday = '*',
 )
 {
 
@@ -26,8 +29,9 @@ class puppetmaster_common::r10k_deploy
     ensure  => $cron_ensure,
     command => $r10k_deploy_script,
     user    => 'root',
-    hour    => '*',
-    minute  => 50,
+    hour    => $hour,
+    minute  => $minute,
+    weekday => $weekday,
     require => File[$r10k_deploy_script],
   }
 }
