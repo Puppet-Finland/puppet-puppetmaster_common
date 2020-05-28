@@ -1,6 +1,10 @@
 # @summary make r10k deploy the production branch every hour
 #
-class puppetmaster_common::r10k_deploy {
+class puppetmaster_common::r10k_deploy
+(
+  Boolean $autodeploy = true
+)
+{
 
   # Automatically update the production environment every hour.
   $r10k_deploy_script = '/usr/local/bin/r10k-deploy.sh'
@@ -13,8 +17,13 @@ class puppetmaster_common::r10k_deploy {
     mode    => '0755',
   }
 
+  $cron_ensure = $autodeploy ? {
+    true    => 'present',
+    default => 'absent',
+  }
+
   cron { 'r10k-deploy':
-    ensure  => 'present',
+    ensure  => $cron_ensure,
     command => $r10k_deploy_script,
     user    => 'root',
     hour    => '*',

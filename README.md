@@ -2,7 +2,7 @@
 
 This module contains some typical Puppetmaster configurations:
 
-* ::puppetmaster_common::r10k_deploy: make r10k run every day
+* ::puppetmaster_common::r10k_deploy: setup r10k deploy script and make it run every hour (unless $autodeploy = false)
 * ::puppetmaster_common::reports_purge: remove old yaml reports via a cronjob
 * ::puppetmaster_common::packetfilter: configure firewall (IPv4 and IPv6) for Puppetserver, PuppetDB and HTTPS (Foreman/Puppetboard). Uses secure defaults (allow localhost only). Firewall rules use the 'default' tag and can be realized automatically if $realize_rules = true.
 
