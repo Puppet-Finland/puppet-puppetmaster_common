@@ -1,12 +1,16 @@
 # puppetmaster_common
 
-This module contains some typical Puppetmaster configurations:
+This module contains classes for common Puppetmaster configurations:
 
 * ::puppetmaster_common::r10k_deploy: setup r10k deploy script and make it run every hour (unless $autodeploy = false)
 * ::puppetmaster_common::reports_purge: remove old yaml reports via a cronjob
 * ::puppetmaster_common::packetfilter: configure firewall (IPv4 and IPv6) for Puppetserver, PuppetDB and HTTPS (Foreman/Puppetboard). Uses secure defaults (allow localhost only). Firewall rules use the 'default' tag and can be realized automatically if $realize_rules = true.
 
 Optionally the Puppetmaster can be setup for being a Puppet Bolt controller that uses PuppetDB to automatically create an inventory.
+
+One Bolt plan is also included:
+
+* ::puppetmaster_common::setup_puppet6_agent: (optionally) remove Puppet 5 (puppetlabs) packages and move away the SSL certs, then join the node to a new Puppet 6 master.
 
 ## Usage
 
@@ -33,3 +37,10 @@ Then set things up, e.g. in a profile:
       bolt_yaml_content          => template('profile/bolt.yaml.erb'),
       ssh_private_key_content    => $ssh_private_key_content,
     }
+
+To migrate nodes from a Puppet 5 server to Puppet 6 server using Bolt:
+
+    $ bolt puppetfile install
+    $ bolt plan run puppetmaster_common::setup_puppet6_agent master_address=puppet6.example.org -u <ssh-username> --sudo-password <sudo-password> --run-as root -t somenode.example.org
+
+You need to have Bolt, SSH, sudo, etc. properly configured for the plan to work.
