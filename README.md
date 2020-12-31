@@ -38,9 +38,26 @@ Then set things up, e.g. in a profile:
       ssh_private_key_content    => $ssh_private_key_content,
     }
 
-To migrate nodes from a Puppet 5 server to Puppet 6 server using Bolt:
+To migrate nodes from a Puppet 5 server to Puppet 6 server using Bolt you first need to
+install this module:
 
     $ bolt puppetfile install
-    $ bolt plan run puppetmaster_common::setup_puppet6_agent master_address=puppet6.example.org -u <ssh-username> --sudo-password <sudo-password> --run-as root -t somenode.example.org
+
+After this you can run the migration plan. In the worst case where your Puppet
+environment does not have DNS or VPN you need to craft a rather elaborate
+command-line:
+
+    $ bolt plan run puppetmaster_common::setup_puppet6_agent \
+        old_master_orchestration_address=<public-ip-of-old-master> \
+        master_address=<private-ip-of-new-master> \
+        master_orchestration_address=<public-ip-of-new-master> \
+        puppet_environment=production \
+        master_hostname=puppet6.example.org \
+        manage_host_entry=true \
+        ensure_puppet=stopped \
+        -u <ssh-username> \
+        --sudo-password <sudo-password> \
+        --run-as root \
+        -t <public-ip-of-agent-node>
 
 You need to have Bolt, SSH, sudo, etc. properly configured for the plan to work.
