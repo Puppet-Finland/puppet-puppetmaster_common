@@ -26,7 +26,8 @@
 #
 # @param ensure_puppet
 #   Ensure that Puppet is running and enabled, or stopped and disabled after
-#   this process.
+#   this process. Also sets --noop to the initial Puppet run with Puppet 6 when
+#   this is set to 'stopped'.
 #
 # @param puppet_environment
 #   Puppet environment to define in the agent's config. Defaults to no
@@ -47,6 +48,14 @@ plan puppetmaster_common::setup_puppet6_agent
   $_master_orchestration_address = $master_orchestration_address ? {
     undef   => $master_address,
     default => $master_orchestration_address,
+  }
+
+  if $ensure_puppet == 'running' {
+    $noop = ''
+    $enable_puppet = true
+  } else {
+    $noop = '--noop'
+    $enable_puppet = false
   }
 
   apply_prep($targets)
@@ -100,7 +109,7 @@ plan puppetmaster_common::setup_puppet6_agent
 
   # Issue a CSR on all Puppet 6 agents. We don't want to error out if a certificate
   # is not received, which is to be expected.
-  run_command('/opt/puppetlabs/bin/puppet agent --onetime --verbose --show_diff --no-daemonize --color=false || true', $targets) # lint:ignore:140chars
+  run_command("/opt/puppetlabs/bin/puppet agent --onetime --verbose --show_diff --no-daemonize --color=false ${noop} || true", $targets) # lint:ignore:140chars
 
   # Do what it takes on the old and new Puppet masters
   get_targets($targets).each |$target| {
@@ -120,11 +129,6 @@ plan puppetmaster_common::setup_puppet6_agent
 
   # Enable or disable Puppet agent on all targets
   apply($targets) {
-    $enable_puppet = $ensure_puppet ? {
-      'running' => true,
-      'stopped' => false,
-    }
-
     service { 'puppet':
       ensure => $ensure_puppet,
       enable => $enable_puppet,

@@ -60,4 +60,7 @@ command-line:
         --run-as root \
         -t <public-ip-of-agent-node>
 
-You need to have Bolt, SSH, sudo, etc. properly configured for the plan to work.
+When ensure_puppet is set to 'stopped' Puppet agent will run in --noop mode,
+making the process "perfectly safe".
+
+You need to have Bolt, SSH, sudo, etc. properly configured for this plan to work.
