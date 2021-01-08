@@ -3,6 +3,7 @@
 class puppetmaster_common::r10k_deploy
 (
   Boolean $autodeploy = true,
+  String $puppet_env = 'production',
   Variant[Array[String], Array[Integer[0-23]], String, Integer[0-23]] $hour = '*',
   Variant[Array[String], Array[Integer[0-59]], String, Integer[0-59]] $minute = '50',
   Variant[Array[String], Array[Integer[0-7]],  String, Integer[0-7]]  $weekday = '*',
