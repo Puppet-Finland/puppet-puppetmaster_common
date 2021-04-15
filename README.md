@@ -6,8 +6,6 @@ This module contains classes for common Puppetmaster configurations:
 * ::puppetmaster_common::reports_purge: remove old yaml reports via a cronjob
 * ::puppetmaster_common::packetfilter: configure firewall (IPv4 and IPv6) for Puppetserver, PuppetDB and HTTPS (Foreman/Puppetboard). Uses secure defaults (allow localhost only). Firewall rules use the 'default' tag and can be realized automatically if $realize_rules = true.
 
-Optionally the Puppetmaster can be setup for being a Puppet Bolt controller that uses PuppetDB to automatically create an inventory.
-
 One Bolt plan is also included:
 
 * ::puppetmaster_common::migrate_agent: (optionally) remove old Puppet (puppetlabs) packages and move away the SSL certs, then join the node to a new Puppet master.
